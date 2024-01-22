@@ -30,9 +30,13 @@ class PokemonResource extends Resource
         return $table
             ->columns([
                 // height comes as 0.1m iterations, weight as 0.1kg
-                Tables\Columns\TextColumn::make('name')->formatStateUsing(fn (string $state) => ucfirst($state)),
+                Tables\Columns\TextColumn::make('name')
+                    ->formatStateUsing(fn (string $state) => ucfirst($state))
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('link'),
             ])
+            ->searchOnBlur()
+            ->searchDebounce('1302000ms') // a hack so that it doesnt update the filter automatically, only on enter
             ->filters([
                 //
             ])

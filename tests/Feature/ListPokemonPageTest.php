@@ -14,4 +14,17 @@ class ListPokemonPageTest extends \Tests\TestCase
         $livewire = \Livewire\Livewire::test(\App\Filament\Resources\PokemonResource\Pages\ListPokemon::class);
         $livewire->assertCanSeeTableRecords($pokemon);
     }
+
+    /**
+     * @test
+     */
+    public function can_search_with_the_filter()
+    {
+        $this->actingAs(\App\Models\User::factory()->create());
+        $pokemon = \App\Models\Pokemon::factory(100)->create();
+        $lastPokemon = $pokemon->last();
+        $livewire = \Livewire\Livewire::test(\App\Filament\Resources\PokemonResource\Pages\ListPokemon::class);
+        $livewire->assertCanNotSeeTableRecords([$lastPokemon]);
+        $livewire->searchTable($lastPokemon->name)->assertCanSeeTableRecords([$lastPokemon]);
+    }
 }
