@@ -2,16 +2,22 @@
 
 declare(strict_types=1);
 
-class ListPokemonPageTest extends \Tests\TestCase
+use App\Filament\Resources\PokemonResource\Pages\ListPokemon;
+use App\Models\Pokemon;
+use App\Models\User;
+use Livewire\Livewire;
+use Tests\TestCase;
+
+class ListPokemonPageTest extends TestCase
 {
     /**
      * @test
      */
     public function can_see_a_full_list_of_available_pokemon()
     {
-        $this->actingAs(\App\Models\User::factory()->create());
-        $pokemon = \App\Models\Pokemon::factory(10)->create();
-        $livewire = \Livewire\Livewire::test(\App\Filament\Resources\PokemonResource\Pages\ListPokemon::class);
+        $this->actingAs(User::factory()->create());
+        $pokemon = Pokemon::factory(10)->create();
+        $livewire = Livewire::test(ListPokemon::class);
         $livewire->assertCanSeeTableRecords($pokemon);
     }
 
@@ -20,10 +26,10 @@ class ListPokemonPageTest extends \Tests\TestCase
      */
     public function can_search_with_the_filter()
     {
-        $this->actingAs(\App\Models\User::factory()->create());
-        $pokemon = \App\Models\Pokemon::factory(100)->create();
+        $this->actingAs(User::factory()->create());
+        $pokemon = Pokemon::factory(100)->create();
         $lastPokemon = $pokemon->last();
-        $livewire = \Livewire\Livewire::test(\App\Filament\Resources\PokemonResource\Pages\ListPokemon::class);
+        $livewire = Livewire::test(ListPokemon::class);
         $livewire->assertCanNotSeeTableRecords([$lastPokemon]);
         $livewire->searchTable($lastPokemon->name)->assertCanSeeTableRecords([$lastPokemon]);
     }

@@ -6,6 +6,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\PokemonResource\Pages;
 use App\Models\Pokemon;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -21,7 +22,11 @@ class PokemonResource extends Resource
     {
         return $form
             ->schema([
-                //
+                TextInput::make('name'),
+                TextInput::make('link')->url(),
+                TextInput::make('species'),
+                TextInput::make('height')->formatStateUsing(fn (?string $state) => intval($state) / 10 .'m'),
+                TextInput::make('weight')->formatStateUsing(fn (?string $state) => intval($state) / 10 .'kg'),
             ]);
     }
 
@@ -29,24 +34,16 @@ class PokemonResource extends Resource
     {
         return $table
             ->columns([
-                // height comes as 0.1m iterations, weight as 0.1kg
                 Tables\Columns\TextColumn::make('name')
                     ->formatStateUsing(fn (string $state) => ucfirst($state))
                     ->searchable(),
-                Tables\Columns\TextColumn::make('link'),
             ])
             ->searchOnBlur()
             ->searchDebounce('1302000ms') // a hack so that it doesnt update the filter automatically, only on enter
-            ->filters([
-                //
-            ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
             ]);
     }
 
