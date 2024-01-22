@@ -16,13 +16,17 @@ class ForceLogin
     {
         if (! Filament::auth()->hasUser()) {
             Model::unguard();
-            $user = User::query()->firstOrCreate([
-                'name' => 'The best Pokemon Trainer',
-                'email' => 'satoshi@oaklabs.pok',
-                'password' => Hash::make('drOakIsMyNewDad')
-            ]);
+            $user = User::query()->firstOrCreate(
+                [
+                    'name' => 'The best Pokemon Trainer',
+                    'email' => 'satoshi@oaklabs.pok',
+                ], [
+                    'password' => Hash::make('drOakIsMyNewDad'),
+                ]
+            );
             Model::reguard();
             Filament::auth()->login($user);
+
             return redirect('pokemon page');
         }
 
