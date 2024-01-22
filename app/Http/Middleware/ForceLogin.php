@@ -26,8 +26,6 @@ class ForceLogin
             );
             Model::reguard();
             Filament::auth()->login($user);
-
-            return redirect('pokemon page');
         }
 
         return $next($request);
