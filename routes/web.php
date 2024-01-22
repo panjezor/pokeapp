@@ -15,6 +15,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// TODO: change this into redirect()->to() once I found the login name
+Route::fallback(fn() => redirect('poke/login'));
